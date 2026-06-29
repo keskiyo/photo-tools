@@ -60,47 +60,6 @@ npm run test:backend # Backend tests only
 npm run test:frontend # Frontend tests only
 ```
 
-## Environment
-
-The project uses the existing `.env` file. Do not commit secrets.
-
-Required:
-
-```env
-DATABASE_URL=
-BETTER_AUTH_SECRET=
-BETTER_AUTH_URL=http://localhost:3000
-```
-
-YandexART / Yandex AI:
-
-```env
-YANDEX_GPT_API=
-YANDEX_ID=
-YANDEX_GPT_MODEL=
-```
-
-Optional Yandex Metrica:
-
-```env
-NEXT_PUBLIC_YANDEX_METRIKA_ID=
-```
-
-Email verification and password reset through Resend:
-
-```env
-RESEND_API_KEY=
-RESEND_FROM_EMAIL=
-```
-
-Background removal through PhotoRoom (optional):
-
-```env
-PHOTOROOM_REMOVE_BG_API=
-```
-
-If YandexART is unavailable or not configured, the generator falls back to the local PhotoTools image. If `PHOTOROOM_REMOVE_BG_API` is not set, `/api/bg-remove` falls back to a local sharp pipeline (no true segmentation).
-
 ## Routes
 
 - `/` - Landing page
