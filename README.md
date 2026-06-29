@@ -1,170 +1,77 @@
 # PhotoTools
 
-PhotoTools is a Next.js image utility app with three workflows:
+**Фон удален. Размер подогнан. Визуал готов.**
 
-- Background remover with upload, processing, and result workspace
-- Image resize/format converter
-- YandexART-ready AI image generator
+PhotoTools - это рабочее пространство для тех, кто каждый день готовит изображения для маркетплейсов, сайтов, рекламы и контента. Без лишних окон, ручной рутины и разбросанных сервисов.
 
-The app uses a dark visual system based on Tailwind CSS tokens in `src/app/globals.css`, local assets in `public/`, and persistent processing history with PostgreSQL + Prisma.
+![PhotoTools preview](public/phototools-app.png)
 
-## Stack
+## Что умеет PhotoTools
 
-- Next.js 16 App Router
-- React 19
-- TypeScript
-- Tailwind CSS 4
-- Prisma + PostgreSQL
-- Better Auth
-- Sharp for image processing
-- PhotoRoom API for background removal (with local sharp fallback)
-- Motion for reveal animations
-- React Hook Form + Zod
-- React Toastify
-- Lucide React icons
-- Vitest
+### Удаление фона
 
-## Getting Started
+Загрузите товар, портрет или промо-фото и получите чистый PNG, готовый для карточки товара, баннера или каталога.
 
-Install dependencies:
+- прозрачный результат для дальнейшего дизайна;
+- удобная страница обработки и скачивания;
+- сравнение до/после прямо в интерфейсе;
+- история последних результатов.
 
-```bash
-npm install
-```
+### Изменение размера
 
-Sync the database schema:
+Подгоняйте изображения под нужный формат без ручной возни в редакторе.
 
-```bash
-npx prisma db push
-```
+- ширина и высота в пикселях;
+- сохранение пропорций;
+- экспорт в PNG, JPEG или WebP;
+- аккуратный предпросмотр до скачивания.
 
-Start the development server:
+### AI-генерация
 
-```bash
-npm run dev
-```
+Создавайте визуальные идеи по текстовому описанию и сохраняйте удачные варианты в истории.
 
-Open [http://localhost:3000](http://localhost:3000).
+- выбор стиля;
+- выбор соотношения сторон;
+- генерация через YandexART-ready workflow;
+- привязка изображений к аккаунту после входа.
 
-`npm run dev` runs `predev` first, which frees port `3000` before starting Next.js.
+## Для кого
 
-## Scripts
+**Маркетплейсы и e-commerce**  
+Быстро готовьте товарные изображения, убирайте фон и приводите фото к единому виду.
 
-```bash
-npm run dev          # Start Next.js dev server on port 3000 with webpack
-npm run build        # Production build with webpack
-npm run start        # Start production server
-npm run lint         # ESLint
-npm run test         # All Vitest tests
-npm run test:backend # Backend tests only
-npm run test:frontend # Frontend tests only
-```
+**Дизайнеры и контент-команды**  
+Собирайте черновики, ассеты и AI-варианты в одном месте, не переключаясь между десятком инструментов.
 
-## Routes
+**Предприниматели и малые команды**  
+Получайте готовые изображения без сложных графических редакторов и долгой подготовки.
 
-- `/` - Landing page
-- `/background-remover` - Background remover upload, processing, and result workflow
-- `/converter` - Image resize/format converter
-- `/ai-generator` - Prompt-based image generation and latest gallery
-- `/login` - Sign in
-- `/register` - Sign up
-- `/verify-email` - Email verification code confirmation
-- `/reset-password/verify` - Password reset code confirmation
-- `/reset-password/new` - New password form
-- `/profile` - Protected user profile
+## Почему хочется пользоваться
 
-API routes:
+- Все ключевые операции с изображениями в одном интерфейсе.
+- Русский и английский язык под пользователя.
+- Аккуратный темный дизайн без перегруженных панелей.
+- Авторизация по email с подтверждением кода.
+- Результаты сохраняются и доступны в последних изображениях.
+- Интерфейс рассчитан на быстрые повторяющиеся задачи, а не на разовое демо.
 
-- `/api/bg-remove`
-- `/api/convert`
-- `/api/generate`
-- `/api/auth/[...all]`
-- `/api/email-verification/send`
-- `/api/email-verification/confirm`
-- `/api/password-reset/send`
-- `/api/password-reset/verify`
-- `/api/password-reset/complete`
-- `/api/processed-images/claim`
+## Как это выглядит в работе
 
-See [`Backend_Api.md`](Backend_Api.md) for request bodies, response shapes, auth requirements, and current backend behavior.
+1. Загрузите изображение.
+2. Выберите нужное действие: убрать фон, изменить размер или сгенерировать визуал.
+3. Получите результат и скачайте файл.
+4. Вернитесь к последним изображениям, если нужно продолжить работу.
 
-## Database
+## PhotoTools заменяет
 
-Prisma schema is in `prisma/schema.prisma`.
+- отдельный сервис для удаления фона;
+- ручное изменение размера в редакторе;
+- отдельную генерацию идей через AI;
+- хаотичное хранение скачанных результатов;
+- повторение одних и тех же действий для каждого изображения.
 
-The app stores processing history in `ProcessedImage`:
+## Готово для визуальной работы
 
-- `type` - `bg_remove`, `convert`, or `ai_gen`
-- `prompt` - AI prompt when relevant
-- `fileName` - uploaded file name when relevant
-- `resultUrl` - public output URL
-- `userId` - linked user when authenticated
-- `anonymousOwnerId` - temporary owner id for anonymous AI generations
-- `createdAt` - creation timestamp
+PhotoTools создан как продуктовый инструмент: с понятной навигацией, локализацией, историей, аккуратными состояниями загрузки, обработкой ошибок и интерфейсом, который не мешает работать.
 
-Better Auth also creates and uses these tables:
-
-- `user`
-- `session`
-- `account`
-- `verification`
-
-Generated files are saved under:
-
-```text
-public/generated/
-```
-
-Demo assets for the background remover preview are stored under:
-
-```text
-public/demo/
-```
-
-## Language Detection
-
-The app chooses the initial UI language in this order:
-
-1. User selection saved in `localStorage` and `ui-language`
-2. Server/CDN country headers via `src/proxy.ts`
-3. Browser locale and timezone fallback
-
-Country headers supported:
-
-- `x-vercel-ip-country`
-- `cf-ipcountry`
-- `x-country`
-- `cloudfront-viewer-country`
-
-`RU` maps to Russian. Other known countries map to EU/English.
-
-App cookies:
-
-- `cookie-consent`
-- `ui-language`
-- `geo-language`
-- `anonymous-owner`
-
-Legacy `phototools-*` cookies are read only for migration and then deleted.
-
-## Design Notes
-
-- Main visual asset: `public/phototools-app.png`
-- Background remover demo assets: `public/demo/`
-- Favicon: `src/app/favicon.ico`
-- Theme tokens: `src/app/globals.css`
-- Icons: `lucide-react`
-- No hardcoded UI colors outside theme tokens unless there is a specific reason.
-
-## Tests
-
-Tests live only under `tests/`:
-
-- `tests/backend/`
-- `tests/frontend/`
-
-Run:
-
-```bash
-npm run test
-```
+**PhotoTools - быстрый способ превратить исходную картинку в готовый ассет.**
