@@ -1,0 +1,10 @@
+node_modules
+.next
+out
+build
+coverage
+public/generated
+public/demo
+logs
+package-lock.json
+src/app/generated
