@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "./__generated__"
 }
 
 datasource db {
@@ -8,32 +9,53 @@ datasource db {
 }
 
 model ProcessedImage {
-  id        String   @id @default(cuid())
-  type      String
-  prompt    String?
-  fileName  String?
-  resultUrl String
-  userId    String?
-  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  id               String   @id @default(cuid())
+  type             String
+  prompt           String?
+  fileName         String?
+  resultUrl        String
+  userId           String?
+  user             User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
   anonymousOwnerId String?
-  createdAt DateTime @default(now())
+  createdAt        DateTime @default(now())
 
   @@index([type, createdAt])
   @@index([userId, createdAt])
   @@index([anonymousOwnerId, createdAt])
 }
 
+model ProcessingJob {
+  id               String   @id @default(cuid())
+  type             String
+  status           String
+  progress         Int      @default(0)
+  inputKey         String?
+  resultUrl        String?
+  error            String?
+  payload          Json?
+  userId           String?
+  user             User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  anonymousOwnerId String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([status, createdAt])
+  @@index([userId, createdAt])
+  @@index([anonymousOwnerId, createdAt])
+}
+
 model User {
-  id            String    @id
-  name          String
-  email         String    @unique
-  emailVerified Boolean
-  image         String?
-  createdAt     DateTime
-  updatedAt     DateTime
-  sessions      Session[]
-  accounts      Account[]
+  id              String           @id
+  name            String
+  email           String           @unique
+  emailVerified   Boolean
+  image           String?
+  createdAt       DateTime
+  updatedAt       DateTime
+  sessions        Session[]
+  accounts        Account[]
   processedImages ProcessedImage[]
+  processingJobs  ProcessingJob[]
 
   @@map("user")
 }

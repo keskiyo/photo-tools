@@ -1,18 +1,19 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import { z } from 'zod'
 
-import { useLocalization } from '@/localization'
 
 /**
  * "Forgot password" action: sends a reset code, then routes to the code page.
  * Always navigates (even on unknown email) to avoid account enumeration.
  */
 export function useForgotPassword() {
-	const { t } = useLocalization()
+	const t = useTranslations()
 	const router = useRouter()
 	const [isSendingReset, setIsSendingReset] = useState(false)
 

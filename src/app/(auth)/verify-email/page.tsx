@@ -1,7 +1,8 @@
+import { getTranslations } from 'next-intl/server'
+
 import { VerifyEmailForm } from '@/app/(auth)/_components/verify-email-form'
 import { Footer } from '@/components/layout/footer'
 import { Navbar } from '@/components/layout/navbar'
-import { T } from '@/localization'
 
 type VerifyEmailPageProps = {
 	searchParams: Promise<{
@@ -12,6 +13,7 @@ type VerifyEmailPageProps = {
 export default async function VerifyEmailPage({
 	searchParams,
 }: VerifyEmailPageProps) {
+	const t = await getTranslations()
 	const params = await searchParams
 
 	return (
@@ -20,7 +22,7 @@ export default async function VerifyEmailPage({
 			<main className='app-container grid min-h-screen place-items-center pt-32 pb-20'>
 				<section className='w-full'>
 					<p className='mb-6 text-center text-sm font-semibold uppercase tracking-[0.18em] text-(--color-app-accent)'>
-						<T k='auth.verify.eyebrow' />
+						{t('auth.verify.eyebrow')}
 					</p>
 					<VerifyEmailForm initialEmail={params.email ?? ''} />
 				</section>

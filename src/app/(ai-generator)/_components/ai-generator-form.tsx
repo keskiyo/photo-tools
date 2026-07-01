@@ -1,25 +1,22 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
 import { ResultPanel } from '@/components/tools/result-panel'
 import { isAbortError, useAbortableSubmit } from '@/hooks/use-abortable-submit'
-import { generateRequestSchema, type GenerateRequest } from '@/lib/tool-schemas'
-import { T, useLocalization } from '@/localization'
+import { resolveJobResult } from '@/hooks/use-processing-job'
+import { generateRequestSchema } from '@/lib/tool-schemas'
+
+import type { AiGeneratorApiResponse, GeneratorValues } from '../_types'
 
 const generatorSchema = generateRequestSchema
 
-type GeneratorValues = GenerateRequest
-
-type ApiResponse = {
-	resultUrl?: string
-	error?: string
-}
-
 export function AiGeneratorForm() {
-	const { t } = useLocalization()
+	const t = useTranslations()
 	const { begin } = useAbortableSubmit()
 	const [resultUrl, setResultUrl] = useState<string>()
 	const [isSubmitting, setIsSubmitting] = useState(false)
@@ -40,19 +37,25 @@ export function AiGeneratorForm() {
 
 		setIsSubmitting(true)
 		try {
+			const signal = begin()
 			const response = await fetch('/api/generate', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(parsed.data),
-				signal: begin(),
+				signal,
 			})
-			const data = (await response.json()) as ApiResponse
+			const data = (await response.json()) as AiGeneratorApiResponse
 
-			if (!response.ok || !data.resultUrl) {
+			if (!response.ok) {
 				throw new Error(data.error ?? t('tool.ai.failed'))
 			}
 
-			setResultUrl(data.resultUrl)
+			setResultUrl(
+				await resolveJobResult(data, {
+					fallbackError: t('tool.ai.failed'),
+					signal,
+				}),
+			)
 			toast.success(t('tool.ai.ready'))
 		} catch (error) {
 			if (isAbortError(error)) return
@@ -71,7 +74,7 @@ export function AiGeneratorForm() {
 				className='app-surface space-y-6 rounded-(--radius-card) p-6'
 			>
 				<label className='grid gap-2 text-sm font-semibold'>
-					<T k='tool.ai.prompt' />
+					{t('tool.ai.prompt')}
 					<textarea
 						{...register('prompt')}
 						rows={7}
@@ -81,7 +84,7 @@ export function AiGeneratorForm() {
 				</label>
 				<div className='grid gap-4 sm:grid-cols-2'>
 					<label className='grid gap-2 text-sm font-semibold'>
-						<T k='tool.ai.style' />
+						{t('tool.ai.style.label')}
 						<select
 							{...register('style')}
 							className='focus-ring min-h-12 rounded-(--radius-control) border border-(--color-app-border) bg-(--color-app-surface) px-4'
@@ -128,7 +131,7 @@ export function AiGeneratorForm() {
 						</select>
 					</label>
 					<label className='grid gap-2 text-sm font-semibold'>
-						<T k='tool.ai.aspect' />
+						{t('tool.ai.aspect')}
 						<select
 							{...register('aspectRatio')}
 							className='focus-ring min-h-12 rounded-(--radius-control) border border-(--color-app-border) bg-(--color-app-surface) px-4'
@@ -151,11 +154,11 @@ export function AiGeneratorForm() {
 					disabled={isSubmitting}
 					className='focus-ring gradient-button min-h-12 w-full cursor-pointer rounded-(--radius-button) px-5 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60'
 				>
-					<T k='tool.ai.submit' />
+					{t('tool.ai.submit')}
 				</button>
 			</form>
 			<ResultPanel
-				title={<T k='tool.ai.result' />}
+				title={t('tool.ai.result')}
 				resultUrl={resultUrl}
 			/>
 		</div>

@@ -1,5 +1,7 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 import { MailCheck } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -8,7 +10,8 @@ import { toast } from 'react-toastify'
 import { z } from 'zod'
 
 import { useCooldown } from '@/hooks/use-cooldown'
-import { useLocalization } from '@/localization'
+
+import type { VerifyEmailFormProps } from '../_types'
 
 const RESEND_COOLDOWN_SECONDS = 100
 
@@ -22,12 +25,8 @@ const verifyEmailSchema = z.object({
 
 type VerifyEmailValues = z.infer<typeof verifyEmailSchema>
 
-type VerifyEmailFormProps = {
-	initialEmail: string
-}
-
 export function VerifyEmailForm({ initialEmail }: VerifyEmailFormProps) {
-	const { t } = useLocalization()
+	const t = useTranslations()
 	const router = useRouter()
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [isSending, setIsSending] = useState(false)
@@ -138,7 +137,7 @@ export function VerifyEmailForm({ initialEmail }: VerifyEmailFormProps) {
 						/>
 					</label>
 					<label className='grid gap-2 text-sm font-semibold'>
-						{t('auth.verify.code')}
+						{t('auth.verify.code.label')}
 						<input
 							{...register('code')}
 							type='text'
@@ -174,7 +173,7 @@ export function VerifyEmailForm({ initialEmail }: VerifyEmailFormProps) {
 
 function getVerificationErrorMessage(
 	reason: string | undefined,
-	t: ReturnType<typeof useLocalization>['t'],
+	t: ReturnType<typeof useTranslations>,
 ) {
 	if (reason === 'expired') return t('auth.verify.expired')
 	if (reason === 'locked') return t('auth.verify.locked')

@@ -1,0 +1,373 @@
+{
+	"documents": {
+		"eyebrow": "Documents",
+		"title": "Legal documents",
+		"fallbackTitle": "Document",
+		"userAgreement": "User Agreement",
+		"privacy": "Privacy Policy"
+	},
+	"nav": {
+		"main": "Main navigation",
+		"menu": "Menu",
+		"bgRemover": "BG Remover",
+		"converter": "Resize",
+		"aiGenerator": "AI Generator",
+		"login": "Login",
+		"profile": "Profile"
+	},
+	"language": {
+		"label": "Language"
+	},
+	"footer": {
+		"description": "PhotoTools prepares clean image assets for background removal, resizing, and AI generation.",
+		"documents": "Documents",
+		"userAgreement": "User Agreement",
+		"privacyPolicy": "Privacy Policy",
+		"otherDocuments": "Other Documents",
+		"backgroundRemover": "Background Remover",
+		"converter": "Resize Image",
+		"aiGenerator": "AI Generator"
+	},
+	"common": {
+		"chooseImage": "Choose an image first.",
+		"checkForm": "Check the form.",
+		"checkSettings": "Check conversion settings.",
+		"checkPrompt": "Check the prompt.",
+		"download": "Download",
+		"loading": "Loading",
+		"noResult": {
+			"title": "No result yet",
+			"description": "Upload or generate an image to preview the output here."
+		},
+		"before": "Before",
+		"after": "After",
+		"result": "Result",
+		"increase": "Increase value",
+		"decrease": "Decrease value"
+	},
+	"cookies": {
+		"title": "Cookies for PhotoTools",
+		"description": "We use cookies to keep the app working correctly.",
+		"accept": "Accept",
+		"decline": "Decline"
+	},
+	"dropzone": {
+		"title": "Drop an image or choose a file",
+		"help": "PNG, JPEG, or WebP up to 10MB"
+	},
+	"home": {
+		"badge": "AI image utilities for everyday production",
+		"title": {
+			"prefix": "Transform Your Images with"
+		},
+		"subtitle": "Remove backgrounds, convert assets, and generate new visuals from a single polished workspace built for speed and clean results.",
+		"cta": {
+			"start": "Start editing",
+			"generate": "Generate with AI"
+		},
+		"tools": {
+			"eyebrow": "Tools",
+			"title": "Choose a tool and get a finished image in a few steps."
+		},
+		"tool": {
+			"bg": {
+				"title": "Background Remover",
+				"description": "Remove the background from a product, portrait, or any photo and download a clean PNG."
+			},
+			"converter": {
+				"title": "Resize Image",
+				"description": "Resize an image, keep proportions, and download the file in the format you need."
+			},
+			"ai": {
+				"title": "AI Generator",
+				"description": "Describe an idea, choose a format, and get a new image for a website, product card, or ad."
+			},
+			"open": "Open tool"
+		},
+		"workflow": {
+			"eyebrow": "Workflow",
+			"title": "How image processing works.",
+			"description": "Upload a photo, choose the settings you need, and download the finished result. Every step is clear without technical knowledge.",
+			"step1": "Upload a photo or write an idea",
+			"step2": "Choose size, format, or style",
+			"step3": "Start processing",
+			"step4": "Download the finished result"
+		},
+		"cap": {
+			"local": {
+				"title": "Easy upload",
+				"description": "Upload your images in the browser and move straight to editing."
+			},
+			"history": {
+				"title": "Result history",
+				"description": "Finished images are saved in your history, so you can return to them after signing in."
+			},
+			"fallback": {
+				"title": "Clear errors",
+				"description": "If processing is temporarily unavailable, the app stays stable and explains what to do next."
+			}
+		},
+		"tiers": {
+			"eyebrow": "Usage tiers",
+			"title": "Simple, flexible plans for background removal."
+		},
+		"tier": {
+			"starter": {
+				"name": "Free",
+				"price": "Free",
+				"badge": "Start without setup",
+				"description": "Try the service and prepare images for everyday tasks.",
+				"bonus": {
+					"title": "Welcome bonus",
+					"info": "Granted once after you sign up.",
+					"item1": "1 photo in high quality",
+					"item2": "3 requests via API"
+				},
+				"daily": {
+					"title": "Free every day",
+					"info": "The limit resets every day.",
+					"item1": "7 photos in Free quality",
+					"item2": "Generating 1 photo with AI"
+				},
+				"cta": "Start free"
+			},
+			"studio": {
+				"name": "Premium",
+				"price": "Premium",
+				"badge": "Fits most image work",
+				"description": "Work without daily limits and keep results organized.",
+				"feature1": "Original image quality",
+				"feature2": "Batch image processing",
+				"feature3": "The balance does not expire",
+				"cta": "Sign in and continue",
+				"total": "Starting cost",
+				"countLabel": "I want to process",
+				"countUnit": "photos",
+				"perPhoto": "photo"
+			},
+			"ops": {
+				"name": "Ops",
+				"price": "Custom",
+				"description": "For teams that need predictable image pipelines.",
+				"feature1": "PostgreSQL persistence",
+				"feature2": "Server route contracts",
+				"feature3": "Provider fallback"
+			}
+		},
+		"faq": {
+			"eyebrow": "FAQ",
+			"title": "Answers before you process an image.",
+			"one": {
+				"question": "What technologies does PhotoTools use?",
+				"answer": "PhotoTools uses server-side image processing, queue-ready jobs, cloud storage, and AI generation through connected providers when they are available."
+			},
+			"two": {
+				"question": "Which file formats are supported?",
+				"answer": "You can upload PNG, JPEG, and WebP images up to 10MB. Server-side validation also checks image dimensions before processing."
+			},
+			"three": {
+				"question": "How do I remove a background?",
+				"answer": "Open the background remover, upload an image, and start processing. PhotoTools sends the task through the processing layer and returns a downloadable result."
+			},
+			"four": {
+				"question": "How fast does processing work?",
+				"answer": "Processing time depends on image size and queue load. Small resize tasks usually finish quickly, while AI generation can take longer."
+			}
+		},
+		"final": {
+			"title": "Start with the image task in front of you.",
+			"description": "Resize assets, prepare PNG outputs, or generate new visual directions without leaving the PhotoTools workspace.",
+			"convert": "Resize an image",
+			"bg": "Remove a background"
+		}
+	},
+	"tool": {
+		"bg": {
+			"eyebrow": "Background remover",
+			"title": "Prepare clean PNG cutouts.",
+			"description": "Upload a product, portrait, or marketplace image and generate a clean downloadable output through the PhotoTools processing layer.",
+			"submit": "Remove background",
+			"can": {
+				"title": "What you can do:",
+				"removeBg": "Remove the image background",
+				"recolor": "Recolor the background to any color"
+			},
+			"progress": "Removing background",
+			"result": "Background result",
+			"processingTitle": "Checking file...",
+			"processingDetail": "Processing photo",
+			"uploadAnother": "Upload another image",
+			"sourcePreview": "Source image preview",
+			"resultPreview": "Background removed preview",
+			"uploadImage": "Upload image",
+			"downloadHd": "Download HD",
+			"hdLimit": "Up to 5000 x 5000px",
+			"downloadFree": "Download Free",
+			"freeLimit": "Up to 1280 x 1280px",
+			"tryAlso": "Try also",
+			"bulk": "Up to 100 photos at once",
+			"video": "Remove video background",
+			"rate": "Rate result",
+			"addBackground": "Add background",
+			"backgroundColor": "Background color",
+			"backgroundColorHelp": "Choose the color that will sit behind the image.",
+			"backgroundPresets": "Quick colors",
+			"customBackgroundColor": "Custom background color",
+			"transparentBackground": "No background",
+			"erase": "Add / erase",
+			"demo": {
+				"people": "People",
+				"animals": "Animals",
+				"objects": "Objects",
+				"scene": "Environment and graphics",
+				"slider": "Compare original and removed background",
+				"beforeAlt": "Background removal comparison preview"
+			},
+			"failed": "Background removal failed.",
+			"ready": "Background removal result is ready."
+		},
+		"converter": {
+			"eyebrow": "Resize",
+			"title": "Resize images.",
+			"description": "Upload a PNG, JPEG, or WebP and export a production-ready asset in the format and size you need.",
+			"outputFormat": "Output format",
+			"proportions": "Proportions",
+			"preserveAspectRatio": "Keep proportions",
+			"width": "Width",
+			"height": "Height",
+			"auto": "Auto",
+			"submit": "Resize image",
+			"progress": "Resizing",
+			"result": "Resized output",
+			"failed": "Resize failed.",
+			"ready": "Image resized."
+		},
+		"ai": {
+			"eyebrow": "AI generator",
+			"title": "Generate image concepts with AI.",
+			"description": "Describe a visual, choose a style and aspect ratio, then save the generated result into your PhotoTools history.",
+			"prompt": "Prompt",
+			"promptTooShort": "Prompt must be at least 8 characters.",
+			"placeholder": "A clean product photo of a futuristic camera on a dark studio background",
+			"style": {
+				"label": "Style",
+				"none": "No style",
+				"product": "Product",
+				"cinematic": "Cinematic",
+				"editorial": "Editorial",
+				"minimal": "Minimal",
+				"portrait": "Portrait",
+				"anime": "Anime",
+				"watercolor": "Watercolor",
+				"render3d": "3D render",
+				"vintage": "Vintage",
+				"cyberpunk": "Cyberpunk",
+				"fantasy": "Fantasy",
+				"popart": "Pop art"
+			},
+			"aspect": "Aspect ratio",
+			"submit": "Generate image",
+			"result": "Generated output",
+			"latest": "Latest images",
+			"failed": "Generation failed.",
+			"ready": "Image generated.",
+			"galleryAlt": "Generated PhotoTools image",
+			"galleryFallback": "Generated image"
+		}
+	},
+	"gallery": {
+		"empty": {
+			"title": "No generations yet",
+			"description": "Generated images will appear here after they are saved."
+		}
+	},
+	"auth": {
+		"login": {
+			"eyebrow": "Welcome back",
+			"title": "Login",
+			"label": "Login"
+		},
+		"register": {
+			"eyebrow": "Create your workspace",
+			"title": "Create account"
+		},
+		"name": {
+			"label": "Name",
+			"placeholder": "Your name"
+		},
+		"email": "Email",
+		"password": {
+			"label": "Password",
+			"confirm": "Repeat password",
+			"show": "Show password",
+			"hide": "Hide password"
+		},
+		"signUp": "Sign Up",
+		"forgotPassword": "Forgot password?",
+		"nameTooShort": "Name must be at least 2 characters.",
+		"invalidEmail": "Enter a valid email.",
+		"passwordTooShort": "Password must be at least 8 characters.",
+		"passwordsMismatch": "Passwords do not match.",
+		"registrationFailed": "Registration failed.",
+		"loginFailed": "Login failed.",
+		"requestFailed": "Auth request failed.",
+		"accountCreated": "Account created.",
+		"loggedIn": "Logged in.",
+		"verify": {
+			"eyebrow": "Email verification",
+			"title": "Enter the code from your email",
+			"description": "We sent a 6-digit verification code to your email. Confirm it to finish account setup.",
+			"code": {
+				"label": "Verification code",
+				"placeholder": "123456"
+			},
+			"submit": "Verify email",
+			"resend": "Send code again",
+			"sent": "Verification code sent.",
+			"success": "Email verified.",
+			"failed": "Verification failed.",
+			"invalid": "Enter the 6-digit code from your email.",
+			"expired": "The code expired. Request a new one.",
+			"locked": "Too many attempts. Request a new code."
+		},
+		"reset": {
+			"eyebrow": "Password reset",
+			"title": "Enter the reset code",
+			"description": "We sent a 6-digit code to your email. Enter it to set a new password.",
+			"code": {
+				"label": "Reset code",
+				"placeholder": "123456"
+			},
+			"submit": "Confirm",
+			"resend": "Send code again",
+			"sent": "Reset code sent.",
+			"success": "Password updated.",
+			"failed": "Could not reset the password.",
+			"invalid": "Enter the 6-digit code from your email.",
+			"expired": "The code expired. Request a new one.",
+			"locked": "Too many attempts. Request a new code.",
+			"newTitle": "Set a new password",
+			"newPassword": "New password",
+			"accept": "Accept"
+		},
+		"profile": {
+			"eyebrow": "Profile",
+			"fallback": "PhotoTools user",
+			"continue": "Continue editing"
+		}
+	},
+	"notFound": {
+		"eyebrow": "404",
+		"title": "Page not found.",
+		"description": "This workspace has tools for background cleanup, conversion, and AI generation, but the page you opened is not part of PhotoTools.",
+		"home": "Go home",
+		"converter": "Open resize tool"
+	},
+	"error": {
+		"eyebrow": "Error",
+		"title": "Something went wrong.",
+		"description": "An unexpected error interrupted this page. You can try again, or head back to the home page.",
+		"retry": "Try again",
+		"home": "Go home"
+	}
+}

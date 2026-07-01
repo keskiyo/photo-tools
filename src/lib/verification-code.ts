@@ -2,6 +2,8 @@ import { createHash, randomInt, timingSafeEqual } from 'node:crypto'
 
 import { Resend } from 'resend'
 
+import { requireAuthSecret } from '@/lib/env'
+
 /** Shape stored in the `verification` table for a one-time code/token. */
 export type StoredCode = {
 	hash: string
@@ -22,7 +24,7 @@ export function generateSixDigitCode() {
  * Used to store codes/tokens without keeping the plaintext.
  */
 export function hashWithSecret(...parts: string[]) {
-	const secret = process.env.BETTER_AUTH_SECRET ?? ''
+	const secret = requireAuthSecret()
 	return createHash('sha256')
 		.update([...parts, secret].join(':'))
 		.digest('hex')

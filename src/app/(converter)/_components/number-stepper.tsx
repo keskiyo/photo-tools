@@ -1,19 +1,8 @@
 'use client'
 
 import { ChevronDown, ChevronUp } from 'lucide-react'
-import type { ReactNode } from 'react'
-import type { UseFormRegisterReturn } from 'react-hook-form'
 
-type NumberStepperProps = {
-	label: ReactNode
-	inputProps: UseFormRegisterReturn
-	placeholder: string
-	increaseLabel: string
-	decreaseLabel: string
-	onValueChange: (value: string) => void
-	onIncrement: () => void
-	onDecrement: () => void
-}
+import type { NumberStepperProps } from '../_types'
 
 export function NumberStepper({
 	label,

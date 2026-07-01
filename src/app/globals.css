@@ -16,6 +16,7 @@
 	--color-app-accent-strong: #667eea;
 	--color-app-accent-warm: #fa709a;
 	--color-app-success: #10b981;
+	--color-app-danger: #f87171;
 	--color-bg-editor-page: #f4f4f2;
 	--color-bg-editor-surface: #fbfbf8;
 	--color-bg-editor-text: #171717;
@@ -38,16 +39,8 @@
 		rgba(79, 172, 254, 0.14),
 		rgba(240, 147, 251, 0.16)
 	);
-	--gradient-bg-editor-bulk: linear-gradient(
-		135deg,
-		#6a8df4 0%,
-		#7851b9 100%
-	);
-	--gradient-bg-editor-video: linear-gradient(
-		135deg,
-		#0aa57d 0%,
-		#2ed3a8 100%
-	);
+	--gradient-bg-editor-bulk: linear-gradient(135deg, #6a8df4 0%, #7851b9 100%);
+	--gradient-bg-editor-video: linear-gradient(135deg, #0aa57d 0%, #2ed3a8 100%);
 	--shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
 	--shadow-card-hover: 0 16px 48px rgba(102, 126, 234, 0.2);
 	--shadow-glow: 0 0 40px rgba(102, 126, 234, 0.16);
@@ -287,81 +280,66 @@ details[open] > .faq-answer {
 @keyframes loader-text {
 	0% {
 		letter-spacing: 1px;
-		transform: translateX(0);
 	}
 
 	40% {
 		letter-spacing: 2px;
-		transform: translateX(26px);
 	}
 
 	80% {
 		letter-spacing: 1px;
-		transform: translateX(32px);
 	}
 
 	90% {
 		letter-spacing: 2px;
-		transform: translateX(0);
 	}
 
 	100% {
 		letter-spacing: 1px;
-		transform: translateX(0);
 	}
 }
 
 @keyframes loader-bar {
 	0% {
 		width: 16px;
-		transform: translateX(0);
 	}
 
 	40% {
 		width: 100%;
-		transform: translateX(0);
 	}
 
 	80% {
 		width: 16px;
-		transform: translateX(64px);
 	}
 
 	90% {
 		width: 100%;
-		transform: translateX(0);
 	}
 
 	100% {
 		width: 16px;
-		transform: translateX(0);
 	}
 }
 
 @keyframes loader-bar-inner {
 	0% {
 		width: 16px;
-		transform: translateX(0);
 	}
 
 	40% {
 		width: 80%;
-		transform: translateX(0);
 	}
 
 	80% {
 		width: 100%;
-		transform: translateX(0);
 	}
 
 	90% {
 		width: 80%;
-		transform: translateX(15px);
 	}
 
 	100% {
 		width: 16px;
-		transform: translateX(0);
 	}
 }
 

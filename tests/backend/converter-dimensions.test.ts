@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { computePairedDimension } from '@/app/(converter)/_hooks/use-converter-dimensions'
+import { computePairedDimension } from '@/app/(converter)/_utils/dimensions'
 
 describe('computePairedDimension', () => {
 	const source = { width: 1000, height: 500 } // 2:1 aspect ratio

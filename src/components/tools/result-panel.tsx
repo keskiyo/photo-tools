@@ -1,10 +1,11 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 import Image from 'next/image'
 import type { ReactNode } from 'react'
 
 import { downloadFile, getDownloadFileName } from '@/lib/download'
-import { useLocalization } from '@/localization'
 
 type ResultPanelProps = {
 	title: ReactNode
@@ -13,7 +14,7 @@ type ResultPanelProps = {
 }
 
 export function ResultPanel({ title, resultUrl, beforeUrl }: ResultPanelProps) {
-	const { t } = useLocalization()
+	const t = useTranslations()
 
 	async function downloadResult() {
 		if (!resultUrl) return

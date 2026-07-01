@@ -1,5 +1,7 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 import { Cookie } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
@@ -7,7 +9,6 @@ import {
 	COOKIE_CONSENT_COOKIE,
 	LEGACY_COOKIE_CONSENT_COOKIE,
 } from '@/lib/app-cookies'
-import { useLocalization } from '@/localization'
 
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 365
 
@@ -16,7 +17,7 @@ export function CookieConsent({
 }: {
 	initialIsVisible: boolean
 }) {
-	const { t } = useLocalization()
+	const t = useTranslations()
 	const [isVisible, setIsVisible] = useState(initialIsVisible)
 
 	useEffect(() => {

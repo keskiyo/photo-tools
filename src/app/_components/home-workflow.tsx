@@ -1,23 +1,25 @@
+import { getTranslations } from 'next-intl/server'
+
 import { AnimatedCard } from '@/components/ui/animated-card'
 import { AnimatedSection } from '@/components/ui/animated-section'
-import { T } from '@/localization'
 
 import { workflowSteps } from './home-data'
 
-export function HomeWorkflow() {
+export async function HomeWorkflow() {
+	const t = await getTranslations()
 	return (
 		<AnimatedSection className='app-container py-20'>
 			<div className='app-surface-strong rounded-(--radius-card) p-8 md:p-10'>
 				<div className='grid gap-10 lg:grid-cols-[0.9fr_1.1fr]'>
 					<div>
 						<p className='text-sm font-semibold uppercase tracking-[0.18em] text-(--color-app-accent)'>
-							<T k='home.workflow.eyebrow' />
+							{t('home.workflow.eyebrow')}
 						</p>
 						<h2 className='mt-4 text-3xl font-bold tracking-tight md:text-5xl'>
-							<T k='home.workflow.title' />
+							{t('home.workflow.title')}
 						</h2>
 						<p className='mt-5 text-(--color-app-text-secondary)'>
-							<T k='home.workflow.description' />
+							{t('home.workflow.description')}
 						</p>
 					</div>
 					<div className='grid gap-4 sm:grid-cols-2'>
@@ -28,7 +30,7 @@ export function HomeWorkflow() {
 										0{index + 1}
 									</span>
 									<p className='mt-4 text-lg font-semibold'>
-										<T k={step} />
+										{t(step)}
 									</p>
 								</div>
 							</AnimatedCard>

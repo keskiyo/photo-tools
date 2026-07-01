@@ -1,23 +1,24 @@
+import { getTranslations } from 'next-intl/server'
+
 import Link from 'next/link'
 import type { ReactNode } from 'react'
-
-import { T, type TranslationKey } from '@/localization'
 
 type ToolCardProps = {
 	href: string
 	title: ReactNode
 	description: ReactNode
 	icon: ReactNode
-	actionKey?: TranslationKey
+	actionKey?: string
 }
 
-export function ToolCard({
+export async function ToolCard({
 	href,
 	title,
 	description,
 	icon,
 	actionKey = 'home.tool.open',
 }: ToolCardProps) {
+	const t = await getTranslations()
 	return (
 		<Link
 			href={href}
@@ -33,7 +34,7 @@ export function ToolCard({
 				{description}
 			</span>
 			<span className='mt-auto pt-8 text-sm font-semibold text-(--color-app-accent)'>
-				<T k={actionKey} />
+				{t(actionKey)}
 			</span>
 		</Link>
 	)

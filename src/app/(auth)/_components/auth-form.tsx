@@ -1,5 +1,7 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 import { Mail, UserRound } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -9,8 +11,8 @@ import { toast } from 'react-toastify'
 import { z } from 'zod'
 
 import { authClient } from '@/lib/auth-client'
-import { useLocalization } from '@/localization'
 
+import type { AuthFormProps } from '../_types'
 import { useForgotPassword } from '../_hooks/use-forgot-password'
 import { AuthField } from './auth-field'
 import { PasswordField } from './password-field'
@@ -25,19 +27,22 @@ type AuthFormValues = z.infer<typeof authSchema> & {
 	confirmPassword?: string
 }
 
-type AuthFormProps = {
-	mode: 'login' | 'register'
-}
-
 export function AuthForm({ mode }: AuthFormProps) {
-	const { t } = useLocalization()
+	const t = useTranslations()
 	const router = useRouter()
 	const { isSendingReset, requestReset } = useForgotPassword()
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [showPassword, setShowPassword] = useState(false)
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 	const isRegister = mode === 'register'
-	const { register, handleSubmit, control } = useForm<AuthFormValues>({
+	const {
+		register,
+		handleSubmit,
+		control,
+		getValues,
+		formState: { errors },
+	} = useForm<AuthFormValues>({
+		mode: 'onTouched',
 		defaultValues: {
 			name: '',
 			email: '',
@@ -45,6 +50,13 @@ export function AuthForm({ mode }: AuthFormProps) {
 			confirmPassword: '',
 		},
 	})
+
+	const validateEmail = (value: string | undefined) =>
+		z
+			.string()
+			.trim()
+			.pipe(z.email())
+			.safeParse(value).success || t('auth.invalidEmail')
 
 	// Keep registration disabled until the required fields are filled.
 	const [name = '', email = '', password = '', confirmPassword = ''] =
@@ -146,13 +158,23 @@ export function AuthForm({ mode }: AuthFormProps) {
 					{isRegister ? (
 						<AuthField
 							icon={<UserRound aria-hidden='true' />}
-							label={t('auth.name')}
+							label={t('auth.name.label')}
+							error={errors.name?.message}
+							errorId='auth-name-error'
 						>
 							<input
-								{...register('name')}
+								{...register('name', {
+									validate: value =>
+										(value?.trim().length ?? 0) >= 2 ||
+										t('auth.nameTooShort'),
+								})}
 								type='text'
 								placeholder={t('auth.name.placeholder')}
 								autoComplete='name'
+								aria-invalid={errors.name ? true : undefined}
+								aria-describedby={
+									errors.name ? 'auth-name-error' : undefined
+								}
 								className='w-full bg-transparent text-sm text-(--color-app-text) outline-none placeholder:text-(--color-app-text-muted)'
 							/>
 						</AuthField>
@@ -161,27 +183,39 @@ export function AuthForm({ mode }: AuthFormProps) {
 					<AuthField
 						icon={<Mail aria-hidden='true' />}
 						label={t('auth.email')}
+						error={errors.email?.message}
+						errorId='auth-email-error'
 					>
 						<input
-							{...register('email')}
+							{...register('email', { validate: validateEmail })}
 							type='email'
 							placeholder={t('auth.email')}
 							autoComplete='email'
+							aria-invalid={errors.email ? true : undefined}
+							aria-describedby={
+								errors.email ? 'auth-email-error' : undefined
+							}
 							className='w-full bg-transparent text-sm text-(--color-app-text) outline-none placeholder:text-(--color-app-text-muted)'
 						/>
 					</AuthField>
 
 					<PasswordField
-						label={t('auth.password')}
-						placeholder={t('auth.password')}
+						label={t('auth.password.label')}
+						placeholder={t('auth.password.label')}
 						autoComplete={
 							isRegister ? 'new-password' : 'current-password'
 						}
-						registration={register('password')}
+						registration={register('password', {
+							validate: value =>
+								(value?.length ?? 0) >= 8 ||
+								t('auth.passwordTooShort'),
+						})}
 						visible={showPassword}
 						onToggle={() => setShowPassword(value => !value)}
 						showLabel={t('auth.password.show')}
 						hideLabel={t('auth.password.hide')}
+						error={errors.password?.message}
+						errorId='auth-password-error'
 					/>
 
 					{isRegister ? (
@@ -189,13 +223,19 @@ export function AuthForm({ mode }: AuthFormProps) {
 							label={t('auth.password.confirm')}
 							placeholder={t('auth.password.confirm')}
 							autoComplete='new-password'
-							registration={register('confirmPassword')}
+							registration={register('confirmPassword', {
+								validate: value =>
+									value === getValues('password') ||
+									t('auth.passwordsMismatch'),
+							})}
 							visible={showConfirmPassword}
 							onToggle={() =>
 								setShowConfirmPassword(value => !value)
 							}
 							showLabel={t('auth.password.show')}
 							hideLabel={t('auth.password.hide')}
+							error={errors.confirmPassword?.message}
+							errorId='auth-confirm-password-error'
 						/>
 					) : null}
 
@@ -216,13 +256,13 @@ export function AuthForm({ mode }: AuthFormProps) {
 							disabled={isSubmitDisabled}
 							className='focus-ring gradient-button min-h-11 flex-1 cursor-pointer rounded-(--radius-button) px-5 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60'
 						>
-							{isRegister ? t('auth.signUp') : t('auth.login')}
+							{isRegister ? t('auth.signUp') : t('auth.login.label')}
 						</button>
 						<Link
 							href={isRegister ? '/login' : '/register'}
 							className='focus-ring inline-flex min-h-11 flex-1 items-center justify-center rounded-(--radius-button) border border-(--color-app-border) bg-(--color-app-surface-light) px-5 text-sm font-semibold transition hover:border-(--color-app-border-strong)'
 						>
-							{isRegister ? t('auth.login') : t('auth.signUp')}
+							{isRegister ? t('auth.login.label') : t('auth.signUp')}
 						</Link>
 					</div>
 				</form>

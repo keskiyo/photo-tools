@@ -1,25 +1,22 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 import Image from 'next/image'
 
-import { T, useLocalization } from '@/localization'
-import type { ProcessedImageRecord } from '@/types/processed-image'
-
-type AiGalleryProps = {
-	images: ProcessedImageRecord[]
-}
+import type { AiGalleryProps } from '../_types'
 
 export function AiGallery({ images }: AiGalleryProps) {
-	const { t } = useLocalization()
+	const t = useTranslations()
 
 	if (images.length === 0) {
 		return (
 			<div className='app-surface rounded-(--radius-card) p-8 text-center'>
 				<p className='text-lg font-semibold'>
-					<T k='gallery.empty.title' />
+					{t('gallery.empty.title')}
 				</p>
 				<p className='mt-2 text-sm text-(--color-app-text-secondary)'>
-					<T k='gallery.empty.description' />
+					{t('gallery.empty.description')}
 				</p>
 			</div>
 		)

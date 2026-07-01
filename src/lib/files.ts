@@ -1,9 +1,9 @@
-import { mkdir, writeFile } from 'node:fs/promises'
-import path from 'node:path'
-
+import {
+	buildStorageKey,
+	getContentTypeForExtension,
+	saveStorageFile,
+} from '@/lib/storage'
 import type { ProcessedImageType } from '@/types/processed-image'
-
-const GENERATED_DIR = path.join(process.cwd(), 'public', 'generated')
 
 const EXTENSIONS_BY_TYPE = {
 	bg_remove: 'png',
@@ -16,14 +16,18 @@ export function createGeneratedFileName(
 	extension?: string,
 ) {
 	const targetExtension = extension ?? EXTENSIONS_BY_TYPE[type]
-	const safeExtension = targetExtension
-		.replace(/[^a-z0-9]/gi, '')
-		.toLowerCase()
-	return `${type}-${Date.now()}-${crypto.randomUUID()}.${safeExtension}`
+	return buildStorageKey({
+		kind: 'generated',
+		type,
+		extension: targetExtension,
+	})
 }
 
 export async function saveGeneratedFile(fileName: string, buffer: Buffer) {
-	await mkdir(GENERATED_DIR, { recursive: true })
-	await writeFile(path.join(GENERATED_DIR, fileName), buffer)
-	return `/generated/${fileName}`
+	const extension = fileName.split('.').pop() ?? 'bin'
+	return saveStorageFile({
+		key: fileName,
+		buffer,
+		contentType: getContentTypeForExtension(extension),
+	})
 }

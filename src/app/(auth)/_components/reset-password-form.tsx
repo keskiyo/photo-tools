@@ -1,5 +1,7 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 import { ShieldCheck } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -7,8 +9,8 @@ import { useForm, useWatch } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { z } from 'zod'
 
-import { useLocalization } from '@/localization'
 
+import type { ResetPasswordFormProps } from '../_types'
 import { PasswordField } from './password-field'
 
 const resetPasswordSchema = z.object({
@@ -18,13 +20,8 @@ const resetPasswordSchema = z.object({
 
 type ResetPasswordValues = z.infer<typeof resetPasswordSchema>
 
-type ResetPasswordFormProps = {
-	email: string
-	token: string
-}
-
 export function ResetPasswordForm({ email, token }: ResetPasswordFormProps) {
-	const { t } = useLocalization()
+	const t = useTranslations()
 	const router = useRouter()
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [showPassword, setShowPassword] = useState(false)

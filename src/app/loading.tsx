@@ -1,10 +1,12 @@
-import { AppLoader } from '@/components/ui/app-loader'
-import { T } from '@/localization'
+import { getTranslations } from 'next-intl/server'
 
-export default function Loading() {
+import { AppLoader } from '@/components/ui/app-loader'
+
+export default async function Loading() {
+	const t = await getTranslations()
 	return (
 		<div className='app-shell flex min-h-screen items-center justify-center'>
-			<AppLoader label={<T k='common.loading' />} />
+			<AppLoader label={t('common.loading')} />
 		</div>
 	)
 }

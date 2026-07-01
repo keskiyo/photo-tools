@@ -5,7 +5,7 @@ import {
 	UI_LANGUAGE_COOKIE,
 } from '@/lib/app-cookies'
 
-export type Language = 'ru' | 'eu'
+export type Language = 'ru' | 'en'
 
 const RUSSIAN_TIME_ZONES = new Set([
 	'Europe/Kaliningrad',
@@ -30,14 +30,17 @@ const RUSSIAN_TIME_ZONES = new Set([
 export function normalizeLanguage(
 	value: string | null | undefined,
 ): Language | null {
-	return value === 'ru' || value === 'eu' ? value : null
+	if (value === 'ru') return 'ru'
+	// Accept the new `en` and migrate the legacy `eu` value.
+	if (value === 'en' || value === 'eu') return 'en'
+	return null
 }
 
 export function countryToLanguage(
 	country: string | null | undefined,
 ): Language | null {
 	if (!country) return null
-	return country.toUpperCase() === 'RU' ? 'ru' : 'eu'
+	return country.toUpperCase() === 'RU' ? 'ru' : 'en'
 }
 
 export function detectPreferredLanguage({
@@ -55,11 +58,11 @@ export function detectPreferredLanguage({
 		return 'ru'
 	}
 
-	return 'eu'
+	return 'en'
 }
 
 export function getBrowserPreferredLanguage(): Language {
-	if (typeof window === 'undefined') return 'eu'
+	if (typeof window === 'undefined') return 'en'
 
 	const storedLanguage = normalizeLanguage(
 		window.localStorage.getItem(UI_LANGUAGE_COOKIE) ??

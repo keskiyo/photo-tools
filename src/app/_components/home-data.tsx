@@ -1,31 +1,37 @@
-import { FileImage, ImageOff, ShieldCheck, Sparkles, Zap } from 'lucide-react'
+import {
+	CalendarCheck,
+	FileImage,
+	ImageOff,
+	Rocket,
+	ShieldCheck,
+	Sparkles,
+	Zap,
+} from 'lucide-react'
 import type { ReactNode } from 'react'
-
-import type { TranslationKey } from '@/localization'
 
 export const homeTools = [
 	{
 		href: '/background-remover',
 		titleKey: 'home.tool.bg.title',
 		descriptionKey: 'home.tool.bg.description',
-		icon: <ImageOff aria-hidden='true' className='h-7 w-7' />,
+		icon: <ImageOff aria-hidden="true" className="h-7 w-7" />,
 	},
 	{
 		href: '/converter',
 		titleKey: 'home.tool.converter.title',
 		descriptionKey: 'home.tool.converter.description',
-		icon: <FileImage aria-hidden='true' className='h-7 w-7' />,
+		icon: <FileImage aria-hidden="true" className="h-7 w-7" />,
 	},
 	{
 		href: '/ai-generator',
 		titleKey: 'home.tool.ai.title',
 		descriptionKey: 'home.tool.ai.description',
-		icon: <Sparkles aria-hidden='true' className='h-7 w-7' />,
+		icon: <Sparkles aria-hidden="true" className="h-7 w-7" />,
 	},
 ] satisfies {
 	href: string
-	titleKey: TranslationKey
-	descriptionKey: TranslationKey
+	titleKey: string
+	descriptionKey: string
 	icon: ReactNode
 }[]
 
@@ -34,46 +40,63 @@ export const workflowSteps = [
 	'home.workflow.step2',
 	'home.workflow.step3',
 	'home.workflow.step4',
-] satisfies TranslationKey[]
+] satisfies string[]
 
 export const pricingTiers = [
 	{
 		nameKey: 'home.tier.starter.name',
 		priceKey: 'home.tier.starter.price',
+		badgeKey: 'home.tier.starter.badge',
 		descriptionKey: 'home.tier.starter.description',
-		featureKeys: [
-			'home.tier.starter.feature1',
-			'home.tier.starter.feature2',
-			'home.tier.starter.feature3',
+		featureGroups: [
+			{
+				icon: <Rocket aria-hidden="true" />,
+				titleKey: 'home.tier.starter.bonus.title',
+				infoKey: 'home.tier.starter.bonus.info',
+				items: [
+					'home.tier.starter.bonus.item1',
+					'home.tier.starter.bonus.item2',
+				],
+			},
+			{
+				icon: <CalendarCheck aria-hidden="true" />,
+				titleKey: 'home.tier.starter.daily.title',
+				infoKey: 'home.tier.starter.daily.info',
+				items: [
+					'home.tier.starter.daily.item1',
+					'home.tier.starter.daily.item2',
+				],
+			},
 		],
+		ctaKey: 'home.tier.starter.cta',
 	},
 	{
 		nameKey: 'home.tier.studio.name',
 		priceKey: 'home.tier.studio.price',
+		badgeKey: 'home.tier.studio.badge',
 		descriptionKey: 'home.tier.studio.description',
 		featureKeys: [
 			'home.tier.studio.feature1',
 			'home.tier.studio.feature2',
 			'home.tier.studio.feature3',
 		],
+		ctaKey: 'home.tier.studio.cta',
 		featured: true,
 	},
-	{
-		nameKey: 'home.tier.ops.name',
-		priceKey: 'home.tier.ops.price',
-		descriptionKey: 'home.tier.ops.description',
-		featureKeys: [
-			'home.tier.ops.feature1',
-			'home.tier.ops.feature2',
-			'home.tier.ops.feature3',
-		],
-	},
 ] satisfies {
-	nameKey: TranslationKey
-	priceKey: TranslationKey
-	descriptionKey: TranslationKey
-	featureKeys: TranslationKey[]
+	nameKey: string
+	priceKey: string
+	badgeKey: string
+	descriptionKey: string
+	ctaKey: string
 	featured?: boolean
+	featureKeys?: string[]
+	featureGroups?: {
+		icon: ReactNode
+		titleKey: string
+		infoKey: string
+		items: string[]
+	}[]
 }[]
 
 export const faqs = [
@@ -83,16 +106,26 @@ export const faqs = [
 		questionKey: 'home.faq.three.question',
 		answerKey: 'home.faq.three.answer',
 	},
-] satisfies { questionKey: TranslationKey; answerKey: TranslationKey }[]
+	{
+		questionKey: 'home.faq.four.question',
+		answerKey: 'home.faq.four.answer',
+	},
+] satisfies { questionKey: string; answerKey: string }[]
 
 export const capabilities = [
 	{
 		titleKey: 'home.cap.local.title',
-		icon: <FileImage aria-hidden='true' />,
+		descriptionKey: 'home.cap.local.description',
+		icon: <FileImage aria-hidden="true" />,
 	},
 	{
 		titleKey: 'home.cap.history.title',
-		icon: <ShieldCheck aria-hidden='true' />,
+		descriptionKey: 'home.cap.history.description',
+		icon: <ShieldCheck aria-hidden="true" />,
 	},
-	{ titleKey: 'home.cap.fallback.title', icon: <Zap aria-hidden='true' /> },
-] satisfies { titleKey: TranslationKey; icon: ReactNode }[]
+	{
+		titleKey: 'home.cap.fallback.title',
+		descriptionKey: 'home.cap.fallback.description',
+		icon: <Zap aria-hidden="true" />,
+	},
+] satisfies { titleKey: string; descriptionKey: string; icon: ReactNode }[]

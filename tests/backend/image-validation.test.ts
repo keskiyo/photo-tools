@@ -4,6 +4,7 @@ import {
 	ACCEPTED_IMAGE_TYPES,
 	MAX_IMAGE_SIZE,
 	isSupportedImage,
+	isSafeImageDimensions,
 	parseOptionalInt,
 	parseQuality,
 } from '@/lib/image-validation'
@@ -40,6 +41,14 @@ describe('image validation helpers', () => {
 		expect(parseQuality('150')).toBe(100)
 		expect(parseQuality('0')).toBe(1)
 		expect(parseQuality(null)).toBe(85)
+	})
+
+	it('rejects image dimensions that are too large for safe processing', () => {
+		expect(isSafeImageDimensions(6000, 6000)).toBe(true)
+		expect(isSafeImageDimensions(6001, 1000)).toBe(false)
+		expect(isSafeImageDimensions(1000, 6001)).toBe(false)
+		expect(isSafeImageDimensions(7000, 7000)).toBe(false)
+		expect(isSafeImageDimensions(0, 1000)).toBe(false)
 	})
 
 	it('validates background remover file selection', () => {

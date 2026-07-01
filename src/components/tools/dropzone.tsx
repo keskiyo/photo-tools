@@ -1,11 +1,12 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+
 import { UploadCloud } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useId, useMemo, useState } from 'react'
 
 import { ACCEPTED_IMAGE_TYPES } from '@/lib/image-validation'
-import { useLocalization } from '@/localization'
 
 type DropzoneProps = {
 	file: File | null
@@ -20,7 +21,7 @@ export function Dropzone({
 }: DropzoneProps) {
 	const inputId = useId()
 	const [dragActive, setDragActive] = useState(false)
-	const { t } = useLocalization()
+	const t = useTranslations()
 	const previewUrl = useMemo(
 		() => (file ? URL.createObjectURL(file) : undefined),
 		[file],
