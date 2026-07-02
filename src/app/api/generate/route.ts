@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 
 import {
 	ANONYMOUS_OWNER_COOKIE,
+	applyAnonymousOwnerCookie,
 	createAnonymousOwnerId,
 } from '@/lib/anonymous-owner'
 import { LEGACY_ANONYMOUS_OWNER_COOKIE } from '@/lib/app-cookies'
@@ -18,7 +19,7 @@ import { resolveLogActor } from '@/lib/prompt-log'
 import { resolveRateKey } from '@/lib/rate-limit'
 import { jsonError } from '@/lib/image-validation'
 import { generateRequestSchema } from '@/lib/tool-schemas'
-import { requestLimits, requestLimitWindowMs } from '@/setting/settings'
+import { requestLimits, requestLimitWindowMs } from '@/config/limits'
 
 const stylePrompts: Record<string, string> = {
 	product: 'clean product photography, studio lighting, sharp focus',
@@ -104,20 +105,19 @@ export async function POST(request: Request) {
 				)
 			: NextResponse.json(await runInline(job.id))
 
-		if (anonymousOwnerId && !currentAnonymousOwnerId) {
-			response.cookies.set(ANONYMOUS_OWNER_COOKIE, anonymousOwnerId, {
-				httpOnly: true,
-				secure: process.env.NODE_ENV === 'production',
-				maxAge: 60 * 60 * 24 * 30,
-				path: '/',
-				sameSite: 'lax',
-			})
-		}
-		response.cookies.delete(LEGACY_ANONYMOUS_OWNER_COOKIE)
+		applyAnonymousOwnerCookie(
+			response,
+			anonymousOwnerId && !currentAnonymousOwnerId
+				? anonymousOwnerId
+				: null,
+		)
 
 		return response
 	} catch (error) {
-		console.error('Generate route failed', error)
+		console.error(
+			'Generate route failed',
+			error instanceof Error ? error.message : 'unknown error',
+		)
 		return jsonError('Could not generate image.', 500)
 	}
 }

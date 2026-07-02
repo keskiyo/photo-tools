@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "./__generated__"
+  output   = "../src/__generated__/prisma"
 }
 
 datasource db {
@@ -50,6 +50,10 @@ model User {
   email           String           @unique
   emailVerified   Boolean
   image           String?
+  role            String           @default("user")
+  banned          Boolean          @default(false)
+  banReason       String?
+  banExpires      DateTime?
   createdAt       DateTime
   updatedAt       DateTime
   sessions        Session[]
@@ -61,15 +65,16 @@ model User {
 }
 
 model Session {
-  id        String   @id
-  expiresAt DateTime
-  token     String   @unique
-  createdAt DateTime
-  updatedAt DateTime
-  ipAddress String?
-  userAgent String?
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id             String   @id
+  expiresAt      DateTime
+  token          String   @unique
+  createdAt      DateTime
+  updatedAt      DateTime
+  ipAddress      String?
+  userAgent      String?
+  impersonatedBy String?
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("session")
 }

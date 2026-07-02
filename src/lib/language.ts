@@ -82,6 +82,26 @@ export function getBrowserPreferredLanguage(): Language {
 	})
 }
 
+export function getLanguageFromRequestHeaders(
+	headers: Pick<Headers, 'get'>,
+): Language {
+	const cookieHeader = headers.get('cookie') ?? ''
+	const fromCookie = normalizeLanguage(
+		getCookieHeaderValue(cookieHeader, UI_LANGUAGE_COOKIE) ??
+			getCookieHeaderValue(cookieHeader, LEGACY_UI_LANGUAGE_COOKIE),
+	)
+	if (fromCookie) return fromCookie
+
+	const fromGeo = normalizeLanguage(
+		getCookieHeaderValue(cookieHeader, GEO_LANGUAGE_COOKIE) ??
+			getCookieHeaderValue(cookieHeader, LEGACY_GEO_LANGUAGE_COOKIE),
+	)
+	if (fromGeo) return fromGeo
+
+	const acceptLanguage = headers.get('accept-language')?.toLowerCase() ?? ''
+	return acceptLanguage.includes('ru') ? 'ru' : 'en'
+}
+
 function getCookieValue(name: string) {
 	const cookie = document.cookie
 		.split('; ')
@@ -89,4 +109,14 @@ function getCookieValue(name: string) {
 	return cookie
 		? decodeURIComponent(cookie.split('=').slice(1).join('='))
 		: null
+}
+
+function getCookieHeaderValue(cookieHeader: string, name: string) {
+	const item = cookieHeader
+		.split('; ')
+		.find(cookieItem => cookieItem.startsWith(`${name}=`))
+
+	if (!item) return null
+
+	return decodeURIComponent(item.split('=').slice(1).join('='))
 }

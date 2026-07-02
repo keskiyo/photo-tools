@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import {
+	buildCodeEmailContent,
 	compareHashes,
 	escapeHtml,
 	generateSixDigitCode,
@@ -54,9 +55,7 @@ describe('compareHashes', () => {
 	})
 
 	it('returns false for different digests', () => {
-		expect(compareHashes(hashWithSecret('a'), hashWithSecret('b'))).toBe(
-			false,
-		)
+		expect(compareHashes(hashWithSecret('a'), hashWithSecret('b'))).toBe(false)
 	})
 
 	it('returns false for different-length inputs', () => {
@@ -84,5 +83,45 @@ describe('escapeHtml', () => {
 		expect(escapeHtml(`<a href="x">O'Neil & co</a>`)).toBe(
 			'&lt;a href=&quot;x&quot;&gt;O&#039;Neil &amp; co&lt;/a&gt;',
 		)
+	})
+})
+
+describe('buildCodeEmailContent', () => {
+	it('builds the registration email with PhotoTools branding', () => {
+		const content = buildCodeEmailContent({
+			name: 'Maks',
+			code: '601914',
+			subject: 'PhotoTools: Подтверждение регистрации',
+			intro: 'введите данный код на странице регистрации:',
+			ttlMinutes: 5,
+			template: 'registration',
+			language: 'ru',
+		})
+
+		expect(content.text).toContain('Подтверждение регистрации')
+		expect(content.text).toContain('Команда PhotoTools')
+		expect(content.html).toContain('601914')
+		expect(content.html).toContain('Команда')
+		expect(content.html).toContain('PhotoTools')
+		expect(content.html).not.toContain('Carve.Photos')
+	})
+
+	it('builds the registration email in English for EN UI', () => {
+		const content = buildCodeEmailContent({
+			name: 'Maks',
+			code: '530577',
+			subject: 'PhotoTools: Registration confirmation',
+			intro: 'enter this code on the registration page:',
+			ttlMinutes: 5,
+			template: 'registration',
+			language: 'en',
+		})
+
+		expect(content.text).toContain('Registration confirmation')
+		expect(content.text).toContain('PhotoTools team')
+		expect(content.html).toContain('530577')
+		expect(content.html).toContain('Team')
+		expect(content.html).toContain('PhotoTools')
+		expect(content.html).not.toContain('Carve.Photos')
 	})
 })

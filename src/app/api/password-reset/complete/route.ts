@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { z } from 'zod'
 
 import { resetPasswordWithToken } from '@/lib/password-reset'
-import { clientIpFromHeaders, rateLimiter } from '@/lib/rate-limit'
+import { consumeEmailAndIpLimits } from '@/lib/rate-limit'
 
 const requestSchema = z.object({
 	email: z.string().trim().pipe(z.email()),
@@ -12,7 +12,6 @@ const requestSchema = z.object({
 
 // Throttle token consumption so a stolen/guessed reset token cannot be hammered.
 const ATTEMPT_LIMIT = 10
-const ATTEMPT_WINDOW_MS = 15 * 60 * 1000 // 15 minutes
 
 export async function POST(request: Request) {
 	const body = await request.json().catch(() => null)
@@ -22,19 +21,14 @@ export async function POST(request: Request) {
 		return NextResponse.json({ error: 'Invalid request.' }, { status: 400 })
 	}
 
-	const email = parsed.data.email.toLowerCase()
-	const ip = clientIpFromHeaders(request.headers)
-	const emailLimit = rateLimiter.consume(
-		`reset-complete:email:${email}`,
-		ATTEMPT_LIMIT,
-		ATTEMPT_WINDOW_MS,
-	)
-	const ipLimit = rateLimiter.consume(
-		`reset-complete:ip:${ip}`,
-		ATTEMPT_LIMIT,
-		ATTEMPT_WINDOW_MS,
-	)
-	if (!emailLimit.ok || !ipLimit.ok) {
+	const allowed = consumeEmailAndIpLimits({
+		namespace: 'reset-complete',
+		email: parsed.data.email,
+		headers: request.headers,
+		emailLimit: ATTEMPT_LIMIT,
+		ipLimit: ATTEMPT_LIMIT,
+	})
+	if (!allowed) {
 		return NextResponse.json(
 			{ error: 'Too many requests. Please try again later.' },
 			{ status: 429 },

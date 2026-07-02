@@ -15,6 +15,11 @@ export type JobCapableResponse = {
 	error?: string
 }
 
+/**
+ * Client-side helper: resolves a tool-API response to a final result URL.
+ * Returns immediately for inline results; otherwise polls /api/jobs/[id]
+ * until the job completes or fails.
+ */
 export async function resolveJobResult(
 	data: JobCapableResponse,
 	options: {

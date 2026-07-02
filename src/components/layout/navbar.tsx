@@ -9,6 +9,7 @@ import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
 import { LanguageSelect } from '@/components/layout/language-select'
+import { ProfileMenu } from '@/components/layout/profile-menu'
 import { authClient } from '@/lib/auth-client'
 
 const navItems = [
@@ -24,7 +25,7 @@ export function Navbar() {
 	const [isMenuOpen, setIsMenuOpen] = useState(false)
 
 	return (
-		<header className="fixed inset-x-0 top-0 z-50 border-b border-(--color-app-border) bg-[color-mix(in_srgb,var(--color-app-bg)_82%,transparent)] backdrop-blur-2xl">
+		<header className="fixed inset-x-0 top-0 z-90 border-b border-(--color-app-border) bg-[color-mix(in_srgb,var(--color-app-bg)_82%,transparent)] backdrop-blur-2xl">
 			<nav
 				className="app-container flex h-20 items-center justify-between gap-4"
 				aria-label={t('nav.main')}
@@ -34,7 +35,9 @@ export function Navbar() {
 				<div className="flex items-center gap-2 sm:gap-3">
 					<LanguageSelect />
 					<AuthLink
-						isSession={Boolean(session)}
+						email={session?.user.email}
+						name={session?.user.name}
+						role={session?.user.role}
 						className="hidden md:inline-flex"
 					/>
 					<button
@@ -57,7 +60,9 @@ export function Navbar() {
 				isOpen={isMenuOpen}
 				onNavigate={() => setIsMenuOpen(false)}
 				pathname={pathname}
-				isSession={Boolean(session)}
+				email={session?.user.email}
+				name={session?.user.name}
+				role={session?.user.role}
 			/>
 		</header>
 	)
@@ -96,12 +101,16 @@ function DesktopNav({ pathname }: { pathname: string }) {
 
 function MobileNav({
 	isOpen,
-	isSession,
+	email,
+	name,
+	role,
 	onNavigate,
 	pathname,
 }: {
+	email?: string
 	isOpen: boolean
-	isSession: boolean
+	name?: string
+	role?: string | null
 	onNavigate: () => void
 	pathname: string
 }) {
@@ -120,7 +129,9 @@ function MobileNav({
 					/>
 				))}
 				<AuthLink
-					isSession={isSession}
+					email={email}
+					name={name}
+					role={role}
 					onNavigate={onNavigate}
 					className="mt-2 inline-flex w-full"
 				/>
@@ -162,26 +173,38 @@ function NavItemLink({
 
 function AuthLink({
 	className = '',
-	isSession,
+	email,
+	name,
+	role,
 	onNavigate,
 }: {
 	className?: string
-	isSession: boolean
+	email?: string
+	name?: string
+	role?: string | null
 	onNavigate?: () => void
 }) {
 	const t = useTranslations()
 
+	if (email) {
+		return (
+			<ProfileMenu
+				displayName={name || email}
+				email={email}
+				isAdmin={role === 'admin'}
+				onNavigate={onNavigate}
+				className={className}
+			/>
+		)
+	}
+
 	return (
 		<Link
-			href={isSession ? '/profile' : '/login'}
+			href="/login"
 			onClick={onNavigate}
-			className={`focus-ring min-h-11 items-center justify-center rounded-(--radius-button) px-4 text-sm font-semibold transition-colors ${
-				isSession
-					? 'border border-(--color-app-border) text-(--color-app-text-secondary) hover:bg-(--color-app-surface-light) hover:text-(--color-app-text)'
-					: 'gradient-button gradient-button-glow text-(--color-app-text)'
-			} ${className}`}
+			className={`focus-ring gradient-button gradient-button-glow min-h-11 items-center justify-center rounded-(--radius-button) px-4 text-sm font-semibold text-(--color-app-text) transition-colors ${className}`}
 		>
-			{isSession ? t('nav.profile') : t('nav.login')}
+			{t('nav.login')}
 		</Link>
 	)
 }

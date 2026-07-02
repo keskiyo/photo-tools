@@ -3,10 +3,9 @@
 import { useTranslations } from 'next-intl'
 
 import { Brush, ImagePlus } from 'lucide-react'
-import type { ReactNode } from 'react'
 import { useState } from 'react'
 
-import type { BackgroundEditorToolsProps } from '../_types'
+import type { BackgroundEditorToolsProps, ToolButtonProps } from '../_types'
 
 const DEFAULT_BACKGROUND_COLOR = '#ffffff'
 const BACKGROUND_PRESETS = [
@@ -102,14 +101,7 @@ function ToolButton({
 	icon,
 	isActive,
 	onClick,
-}: {
-	ariaExpanded?: boolean
-	children: string
-	disabled: boolean
-	icon: ReactNode
-	isActive?: boolean
-	onClick?: () => void
-}) {
+}: ToolButtonProps) {
 	return (
 		<button
 			type="button"

@@ -1,10 +1,5 @@
-import {
-	DeleteObjectCommand,
-	GetObjectCommand,
-	PutObjectCommand,
-	S3Client,
-} from '@aws-sdk/client-s3'
-import { mkdir, readFile, rm, writeFile } from 'node:fs/promises'
+import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import { Readable } from 'node:stream'
 
@@ -71,20 +66,6 @@ export async function saveStorageFile({
 	await mkdir(path.dirname(localPath), { recursive: true })
 	await writeFile(localPath, buffer)
 	return getPublicStorageUrl(key)
-}
-
-export async function deleteStorageFile(key: string) {
-	if (isS3StorageConfigured()) {
-		await getS3Client().send(
-			new DeleteObjectCommand({
-				Bucket: process.env.S3_BUCKET!,
-				Key: key,
-			}),
-		)
-		return
-	}
-
-	await rm(resolveLocalStoragePath(key), { force: true })
 }
 
 export async function readStorageFile(key: string) {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { generateRequestSchema } from '@/lib/tool-schemas'
+import { converterSchema, generateRequestSchema } from '@/lib/tool-schemas'
 
 describe('generateRequestSchema', () => {
 	it('accepts a valid body and trims the prompt', () => {
@@ -53,5 +53,48 @@ describe('generateRequestSchema', () => {
 	it('rejects a non-object body', () => {
 		expect(generateRequestSchema.safeParse(null).success).toBe(false)
 		expect(generateRequestSchema.safeParse('nope').success).toBe(false)
+	})
+})
+
+describe('converterSchema', () => {
+	it('coerces dimensions from form data strings', () => {
+		const result = converterSchema.safeParse({
+			format: 'webp',
+			width: '1200',
+			height: '800',
+			preserveAspectRatio: true,
+		})
+
+		expect(result.success).toBe(true)
+		if (result.success) {
+			expect(result.data.width).toBe(1200)
+			expect(result.data.height).toBe(800)
+		}
+	})
+
+	it('allows empty optional dimensions', () => {
+		const result = converterSchema.safeParse({
+			format: 'png',
+			width: '',
+			height: '',
+			preserveAspectRatio: false,
+		})
+
+		expect(result.success).toBe(true)
+		if (result.success) {
+			expect(result.data.width).toBe('')
+			expect(result.data.height).toBe('')
+		}
+	})
+
+	it('rejects unsupported output formats', () => {
+		expect(
+			converterSchema.safeParse({
+				format: 'gif',
+				width: '',
+				height: '',
+				preserveAspectRatio: true,
+			}).success,
+		).toBe(false)
 	})
 })

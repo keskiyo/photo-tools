@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto'
 
+import type { Language } from '@/lib/language'
 import { prisma } from '@/lib/prisma'
 import {
 	compareHashes,
@@ -19,7 +20,10 @@ type VerifyEmailCodeResult =
 	| { ok: true }
 	| { ok: false; reason: 'expired' | 'invalid' | 'locked' | 'not_found' }
 
-export async function sendEmailVerificationCode(email: string) {
+export async function sendEmailVerificationCode(
+	email: string,
+	language: Language = 'en',
+) {
 	const normalizedEmail = normalizeEmail(email)
 	const user = await prisma.user.findUnique({
 		where: { email: normalizedEmail },
@@ -55,9 +59,17 @@ export async function sendEmailVerificationCode(email: string) {
 		to: normalizedEmail,
 		name: user.name,
 		code,
-		subject: 'PhotoTools email verification code',
-		intro: 'enter this code to verify your email:',
+		subject:
+			language === 'ru'
+				? 'PhotoTools: Подтверждение регистрации'
+				: 'PhotoTools: Registration confirmation',
+		intro:
+			language === 'ru'
+				? 'введите данный код на странице регистрации:'
+				: 'enter this code on the registration page:',
 		ttlMinutes: CODE_TTL_MINUTES,
+		template: 'registration',
+		language,
 	})
 }
 

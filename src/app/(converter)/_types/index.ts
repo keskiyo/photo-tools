@@ -5,7 +5,7 @@ import type {
 	UseFormSetValue,
 } from 'react-hook-form'
 
-import type { JobCapableResponse } from '@/hooks/use-processing-job'
+import type { JobCapableResponse } from '@/lib/job-client'
 import type { ConverterFormValues } from '@/lib/tool-schemas'
 
 export type Dimension = 'width' | 'height'

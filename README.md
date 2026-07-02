@@ -77,7 +77,8 @@ yarn worker:image
 
 ## Архитектура
 
-- **Маршруты** сгруппированы по инструментам: `src/app/(background-remover)`, `(converter)`, `(ai-generator)`, `(auth)`. Route-специфичные компоненты/хуки лежат в `_components/`, `_hooks/` внутри группы.
+- **Маршруты** сгруппированы по инструментам: `src/app/(background-remover)`, `(converter)`, `(ai-generator)`, `(auth)`. Route-специфичный код лежит внутри группы в `_components/`, `_hooks/`, `_types/`, `_utils/`.
+- **Админка** — `/admin` (admin-плагин Better Auth): список пользователей, блокировка/разблокировка. Доступ только для `role: admin`, проверка на сервере.
 - **API** — route handlers в `src/app/api/*`. Обработка изображений идёт через задачи (`ProcessingJob`): роут создаёт задачу и, если есть Redis, отдаёт `202` + `jobId`; клиент опрашивает `GET /api/jobs/[id]` до завершения. Без Redis задача выполняется inline.
 - **Воркер** — `src/workers/image-worker.ts` разбирает очередь и вызывает `src/lib/image-processors.ts` (sharp / PhotoRoom / YandexART).
 - **Хранилище** — `src/lib/storage.ts` абстрагирует S3 и локальную ФС.
@@ -91,7 +92,8 @@ yarn worker:image
 
 - Валидация обязательных env при старте, fail-fast.
 - Загрузки: проверка типа/размера (≤ 10 МБ), ранний отказ по `Content-Length`, проверка размеров изображения через sharp.
-- Rate limiting per-user/IP (`src/setting/settings.ts`). Для инструментов бюджет тратится только при успехе; на `send`/`confirm`-эндпоинтах — строгие лимиты против перебора.
+- Rate limiting per-user/IP (`src/config/limits.ts`); на `send`/`confirm`-эндпоинтах — строгие лимиты против перебора кодов.
+- Скачивание результатов — через `GET /api/download` с белым списком источников (защита от SSRF).
 - Доступ к статусу задачи (`/api/jobs/[id]`) — только владельцу.
 - Заголовки безопасности в [`next.config.ts`](next.config.ts): HSTS, `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`, `Permissions-Policy`, а также CSP в режиме `Report-Only`.
 

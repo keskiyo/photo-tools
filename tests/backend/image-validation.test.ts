@@ -5,7 +5,6 @@ import {
 	MAX_IMAGE_SIZE,
 	isSupportedImage,
 	isSafeImageDimensions,
-	parseOptionalInt,
 	parseQuality,
 } from '@/lib/image-validation'
 import { backgroundRemoverSchema } from '@/lib/tool-schemas'
@@ -34,10 +33,7 @@ describe('image validation helpers', () => {
 		expect(isSupportedImage(oversized)).toBe(false)
 	})
 
-	it('parses optional dimensions and clamps quality', () => {
-		expect(parseOptionalInt('1200')).toBe(1200)
-		expect(parseOptionalInt('')).toBeUndefined()
-		expect(parseOptionalInt('-1')).toBeUndefined()
+	it('clamps quality into the 1-100 range', () => {
 		expect(parseQuality('150')).toBe(100)
 		expect(parseQuality('0')).toBe(1)
 		expect(parseQuality(null)).toBe(85)

@@ -77,8 +77,8 @@ export function ResetPasswordForm({ email, token }: ResetPasswordFormProps) {
 	}
 
 	return (
-		<div className='mx-auto w-full max-w-md rounded-[26px] bg-(--gradient-app) p-[1px] transition hover:shadow-(--shadow-card-hover)'>
-			<div className='rounded-[25px] bg-(--color-app-surface) px-8 py-8'>
+		<div className='auth-card'>
+			<div className='auth-card-inner px-8 py-8'>
 				<div className='mx-auto mb-6 grid h-12 w-12 place-items-center rounded-2xl bg-(--gradient-app-soft) text-(--color-app-accent)'>
 					<ShieldCheck aria-hidden='true' className='h-6 w-6' />
 				</div>

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { z } from 'zod'
 
 import { verifyPasswordResetCode } from '@/lib/password-reset'
-import { clientIpFromHeaders, rateLimiter } from '@/lib/rate-limit'
+import { consumeEmailAndIpLimits } from '@/lib/rate-limit'
 
 const requestSchema = z.object({
 	email: z.string().trim().pipe(z.email()),
@@ -11,7 +11,6 @@ const requestSchema = z.object({
 
 // Throttle guess attempts so the reset code cannot be brute-forced across codes.
 const ATTEMPT_LIMIT = 10
-const ATTEMPT_WINDOW_MS = 15 * 60 * 1000 // 15 minutes
 
 export async function POST(request: Request) {
 	const body = await request.json().catch(() => null)
@@ -24,19 +23,14 @@ export async function POST(request: Request) {
 		)
 	}
 
-	const email = parsed.data.email.toLowerCase()
-	const ip = clientIpFromHeaders(request.headers)
-	const emailLimit = rateLimiter.consume(
-		`reset-verify:email:${email}`,
-		ATTEMPT_LIMIT,
-		ATTEMPT_WINDOW_MS,
-	)
-	const ipLimit = rateLimiter.consume(
-		`reset-verify:ip:${ip}`,
-		ATTEMPT_LIMIT,
-		ATTEMPT_WINDOW_MS,
-	)
-	if (!emailLimit.ok || !ipLimit.ok) {
+	const allowed = consumeEmailAndIpLimits({
+		namespace: 'reset-verify',
+		email: parsed.data.email,
+		headers: request.headers,
+		emailLimit: ATTEMPT_LIMIT,
+		ipLimit: ATTEMPT_LIMIT,
+	})
+	if (!allowed) {
 		return NextResponse.json(
 			{ error: 'Too many requests. Please try again later.' },
 			{ status: 429 },

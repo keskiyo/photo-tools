@@ -118,6 +118,42 @@ export function clientIpFromHeaders(headers: Headers): string {
 	return 'unknown'
 }
 
+/** Shared fixed window for email-code endpoints (send/confirm/verify). */
+export const EMAIL_RATE_WINDOW_MS = 15 * 60 * 1000
+
+/**
+ * Consumes both the per-email and per-IP budgets for an email-code endpoint
+ * (verification/reset send + confirm routes). Returns false when either
+ * budget is exhausted — callers respond with 429.
+ */
+export function consumeEmailAndIpLimits({
+	namespace,
+	email,
+	headers,
+	emailLimit,
+	ipLimit,
+	windowMs = EMAIL_RATE_WINDOW_MS,
+}: {
+	namespace: string
+	email: string
+	headers: Headers
+	emailLimit: number
+	ipLimit: number
+	windowMs?: number
+}): boolean {
+	const byEmail = rateLimiter.consume(
+		`${namespace}:email:${email.toLowerCase()}`,
+		emailLimit,
+		windowMs,
+	)
+	const byIp = rateLimiter.consume(
+		`${namespace}:ip:${clientIpFromHeaders(headers)}`,
+		ipLimit,
+		windowMs,
+	)
+	return byEmail.ok && byIp.ok
+}
+
 /**
  * Builds a rate-limit key for a route: prefers the signed-in user, else IP.
  * `namespace` keeps different endpoints from sharing a budget.

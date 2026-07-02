@@ -14,6 +14,11 @@ import { authClient } from '@/lib/auth-client'
 
 import type { AuthFormProps } from '../_types'
 import { useForgotPassword } from '../_hooks/use-forgot-password'
+import {
+	claimAnonymousImages,
+	isValidEmail,
+	sendVerificationCode,
+} from '../_utils/auth-api'
 import { AuthField } from './auth-field'
 import { PasswordField } from './password-field'
 
@@ -52,11 +57,7 @@ export function AuthForm({ mode }: AuthFormProps) {
 	})
 
 	const validateEmail = (value: string | undefined) =>
-		z
-			.string()
-			.trim()
-			.pipe(z.email())
-			.safeParse(value).success || t('auth.invalidEmail')
+		isValidEmail(value) || t('auth.invalidEmail')
 
 	// Keep registration disabled until the required fields are filled.
 	const [name = '', email = '', password = '', confirmPassword = ''] =
@@ -143,8 +144,8 @@ export function AuthForm({ mode }: AuthFormProps) {
 	}
 
 	return (
-		<div className='mx-auto w-full max-w-md rounded-[26px] bg-(--gradient-app) p-px transition hover:shadow-(--shadow-card-hover)'>
-			<div className='rounded-[25px] bg-(--color-app-surface) transition duration-200 hover:scale-[0.99]'>
+		<div className='auth-card'>
+			<div className='auth-card-inner transition duration-200 hover:scale-[0.99]'>
 				<form
 					onSubmit={handleSubmit(onSubmit)}
 					className='flex flex-col gap-3 px-8 py-8'
@@ -271,20 +272,3 @@ export function AuthForm({ mode }: AuthFormProps) {
 	)
 }
 
-async function claimAnonymousImages() {
-	await fetch('/api/processed-images/claim', {
-		method: 'POST',
-	})
-}
-
-async function sendVerificationCode(email: string, errorMessage: string) {
-	const response = await fetch('/api/email-verification/send', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ email }),
-	})
-
-	if (!response.ok) {
-		throw new Error(errorMessage)
-	}
-}

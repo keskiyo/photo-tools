@@ -12,16 +12,22 @@ export async function downloadFile(
 	url: string,
 	fileName: string,
 ): Promise<void> {
-	const response = await fetch(url)
+	const response = await fetch(getDownloadProxyUrl(url, fileName))
+	if (!response.ok) {
+		throw new Error('Could not download the file.')
+	}
 	const blob = await response.blob()
 	downloadBlob(blob, fileName)
 }
 
-/** Fetches a transparent image, places it on a solid color, and downloads PNG. */
-export async function downloadImageWithBackground(
+export type DownloadImageFormat = 'png' | 'webp' | 'jpg'
+
+/** Fetches an image, optionally places it on a color, and downloads the chosen format. */
+export async function downloadImageAs(
 	url: string,
 	fileName: string,
-	backgroundColor: string,
+	format: DownloadImageFormat,
+	backgroundColor?: string,
 ): Promise<void> {
 	const response = await fetch(url)
 	const blob = await response.blob()
@@ -35,8 +41,12 @@ export async function downloadImageWithBackground(
 
 	canvas.width = image.width
 	canvas.height = image.height
-	context.fillStyle = backgroundColor
-	context.fillRect(0, 0, canvas.width, canvas.height)
+
+	if (backgroundColor || format === 'jpg') {
+		context.fillStyle = backgroundColor ?? '#ffffff'
+		context.fillRect(0, 0, canvas.width, canvas.height)
+	}
+
 	context.drawImage(image, 0, 0)
 	image.close()
 
@@ -48,10 +58,10 @@ export async function downloadImageWithBackground(
 			}
 
 			reject(new Error('Could not prepare the image.'))
-		}, 'image/png')
+		}, getMimeType(format))
 	})
 
-	downloadBlob(outputBlob, withPngExtension(fileName))
+	downloadBlob(outputBlob, withImageExtension(fileName, format))
 }
 
 function downloadBlob(blob: Blob, fileName: string) {
@@ -66,6 +76,18 @@ function downloadBlob(blob: Blob, fileName: string) {
 	URL.revokeObjectURL(objectUrl)
 }
 
-function withPngExtension(fileName: string) {
-	return fileName.replace(/\.[^.]+$/, '') + '.png'
+function getMimeType(format: DownloadImageFormat) {
+	return format === 'jpg' ? 'image/jpeg' : `image/${format}`
+}
+
+function withImageExtension(fileName: string, format: DownloadImageFormat) {
+	return `${fileName.replace(/\.[^.]+$/, '')}.${format}`
+}
+
+function getDownloadProxyUrl(url: string, fileName: string) {
+	const params = new URLSearchParams({
+		filename: fileName,
+		url,
+	})
+	return `/api/download?${params.toString()}`
 }

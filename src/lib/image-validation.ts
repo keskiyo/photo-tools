@@ -8,10 +8,6 @@ export const MAX_IMAGE_WIDTH = 6000
 export const MAX_IMAGE_HEIGHT = 6000
 export const MAX_IMAGE_PIXELS = 36_000_000
 
-export type ApiSuccess = {
-	resultUrl: string
-}
-
 export function jsonError(message: string, status = 400) {
 	return NextResponse.json({ error: message }, { status })
 }
@@ -45,12 +41,6 @@ export function isSafeImageDimensions(width: number, height: number) {
 		height <= MAX_IMAGE_HEIGHT &&
 		width * height <= MAX_IMAGE_PIXELS
 	)
-}
-
-export function parseOptionalInt(value: FormDataEntryValue | null) {
-	if (typeof value !== 'string' || value.trim() === '') return undefined
-	const parsed = Number.parseInt(value, 10)
-	return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined
 }
 
 export function parseQuality(value: FormDataEntryValue | null) {

@@ -1,15 +1,13 @@
-import { getTranslations } from 'next-intl/server'
-
 import { headers } from 'next/headers'
-import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
+import { ProfileDashboard } from '@/app/(auth)/_components/profile-dashboard'
 import { Footer } from '@/components/layout/footer'
 import { Navbar } from '@/components/layout/navbar'
 import { auth } from '@/lib/auth'
+import { getRecentProcessedImages } from '@/lib/processed-images'
 
 export default async function ProfilePage() {
-	const t = await getTranslations()
 	const session = await auth.api.getSession({
 		headers: await headers(),
 	})
@@ -19,32 +17,29 @@ export default async function ProfilePage() {
 	}
 
 	if (!session.user.emailVerified) {
-		redirect(
-			`/verify-email?email=${encodeURIComponent(session.user.email)}`,
-		)
+		redirect(`/verify-email?email=${encodeURIComponent(session.user.email)}`)
 	}
 
+	const historyImages = await getRecentProcessedImages('ai_gen', 60, {
+		userId: session.user.id,
+	})
+
 	return (
-		<div className='app-shell'>
+		<div className="app-shell">
 			<Navbar />
-			<main className='app-container min-h-screen pt-32 pb-20'>
-				<section className='app-surface-strong mx-auto max-w-2xl rounded-(--radius-card) p-8'>
-					<p className='text-sm font-semibold uppercase tracking-[0.18em] text-(--color-app-accent)'>
-						{t('auth.profile.eyebrow')}
-					</p>
-					<h1 className='mt-4 text-4xl font-bold tracking-tight'>
-						{session?.user?.name ?? t('auth.profile.fallback')}
-					</h1>
-					<p className='mt-4 text-(--color-app-text-secondary)'>
-						{session?.user?.email}
-					</p>
-					<Link
-						href='/converter'
-						className='focus-ring gradient-button mt-8 inline-flex min-h-11 items-center rounded-(--radius-button) px-5 text-sm font-semibold'
-					>
-						{t('auth.profile.continue')}
-					</Link>
-				</section>
+			<main className="app-container min-h-screen pt-32 pb-20">
+				<ProfileDashboard
+					user={{
+						name: session.user.name,
+						email: session.user.email,
+					}}
+					historyImages={historyImages.map(image => ({
+						id: image.id,
+						prompt: image.prompt,
+						resultUrl: image.resultUrl,
+						createdAt: image.createdAt.toISOString(),
+					}))}
+				/>
 			</main>
 			<Footer />
 		</div>

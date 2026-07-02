@@ -16,6 +16,9 @@ export type RequestOwner = {
 	anonymousOwnerId: string | null
 }
 
+/** Lifetime of the anonymous-owner cookie (30 days). */
+export const ANONYMOUS_OWNER_COOKIE_MAX_AGE = 60 * 60 * 24 * 30
+
 export function createAnonymousOwnerId() {
 	return `anon_${randomUUID()}`
 }
@@ -85,7 +88,7 @@ export function applyAnonymousOwnerCookie(
 		response.cookies.set(ANONYMOUS_OWNER_COOKIE, cookieToSet, {
 			httpOnly: true,
 			secure: process.env.NODE_ENV === 'production',
-			maxAge: 60 * 60 * 24 * 30,
+			maxAge: ANONYMOUS_OWNER_COOKIE_MAX_AGE,
 			path: '/',
 			sameSite: 'lax',
 		})

@@ -4,6 +4,8 @@ import { useTranslations } from 'next-intl'
 
 import Image from 'next/image'
 import type { ReactNode } from 'react'
+import { useState } from 'react'
+import { toast } from 'react-toastify'
 
 import { downloadFile, getDownloadFileName } from '@/lib/download'
 
@@ -11,24 +13,40 @@ type ResultPanelProps = {
 	title: ReactNode
 	resultUrl?: string
 	beforeUrl?: string
+	downloadFileName?: string
 }
 
-export function ResultPanel({ title, resultUrl, beforeUrl }: ResultPanelProps) {
+export function ResultPanel({
+	title,
+	resultUrl,
+	beforeUrl,
+	downloadFileName,
+}: ResultPanelProps) {
 	const t = useTranslations()
+	const [isDownloading, setIsDownloading] = useState(false)
 
 	async function downloadResult() {
 		if (!resultUrl) return
-		await downloadFile(resultUrl, getDownloadFileName(resultUrl))
+
+		setIsDownloading(true)
+		try {
+			await downloadFile(
+				resultUrl,
+				downloadFileName ?? getDownloadFileName(resultUrl),
+			)
+		} catch {
+			toast.error(t('common.downloadFailed'))
+		} finally {
+			setIsDownloading(false)
+		}
 	}
 
 	if (!resultUrl) {
 		return (
-			<div className='app-surface grid min-h-80 place-items-center rounded-(--radius-card) p-8 text-center'>
+			<div className="app-surface grid min-h-80 place-items-center rounded-(--radius-card) p-8 text-center">
 				<div>
-					<p className='text-lg font-semibold'>
-						{t('common.noResult.title')}
-					</p>
-					<p className='mt-2 text-sm text-(--color-app-text-secondary)'>
+					<p className="text-lg font-semibold">{t('common.noResult.title')}</p>
+					<p className="mt-2 text-sm text-(--color-app-text-secondary)">
 						{t('common.noResult.description')}
 					</p>
 				</div>
@@ -37,13 +55,14 @@ export function ResultPanel({ title, resultUrl, beforeUrl }: ResultPanelProps) {
 	}
 
 	return (
-		<div className='app-surface rounded-(--radius-card) p-5'>
-			<div className='mb-4 flex items-center justify-between gap-4'>
-				<h2 className='text-xl font-semibold'>{title}</h2>
+		<div className="app-surface rounded-(--radius-card) p-5">
+			<div className="mb-4 flex items-center justify-between gap-4">
+				<h2 className="text-xl font-semibold">{title}</h2>
 				<button
-					type='button'
+					type="button"
 					onClick={downloadResult}
-					className='focus-ring gradient-button inline-flex min-h-10 items-center rounded-(--radius-button) px-4 text-sm font-semibold'
+					disabled={isDownloading}
+					className="focus-ring gradient-button inline-flex min-h-10 cursor-pointer items-center rounded-(--radius-button) px-4 text-sm font-semibold disabled:cursor-not-allowed disabled:opacity-60"
 				>
 					{t('common.download')}
 				</button>
@@ -63,17 +82,17 @@ export function ResultPanel({ title, resultUrl, beforeUrl }: ResultPanelProps) {
 
 function PreviewImage({ label, src }: { label: string; src: string }) {
 	return (
-		<div className='overflow-hidden rounded-(--radius-control) border border-(--color-app-border) bg-(--color-app-bg-soft)'>
-			<div className='border-b border-(--color-app-border) px-4 py-2 text-sm font-semibold text-(--color-app-text-secondary)'>
+		<div className="overflow-hidden rounded-(--radius-control) border border-(--color-app-border) bg-(--color-app-bg-soft)">
+			<div className="border-b border-(--color-app-border) px-4 py-2 text-sm font-semibold text-(--color-app-text-secondary)">
 				{label}
 			</div>
-			<div className='relative aspect-4/3'>
+			<div className="relative aspect-4/3">
 				<Image
 					src={src}
 					alt={`${label} image preview`}
 					fill
-					sizes='(max-width: 768px) 100vw, 560px'
-					className='object-contain p-4'
+					sizes="(max-width: 768px) 100vw, 560px"
+					className="object-contain p-4"
 				/>
 			</div>
 		</div>

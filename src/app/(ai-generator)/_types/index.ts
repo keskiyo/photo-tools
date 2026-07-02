@@ -1,4 +1,4 @@
-import type { JobCapableResponse } from '@/hooks/use-processing-job'
+import type { JobCapableResponse } from '@/lib/job-client'
 import type { GenerateRequest } from '@/lib/tool-schemas'
 import type { ProcessedImageRecord } from '@/types/processed-image'
 

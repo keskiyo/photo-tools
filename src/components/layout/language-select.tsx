@@ -59,24 +59,24 @@ export function LanguageSelect() {
 		languages.find(item => item.value === locale)?.label ?? locale
 
 	return (
-		<div className='relative'>
+		<div className="relative">
 			<button
 				ref={buttonRef}
-				type='button'
+				type="button"
 				onClick={toggleOpen}
 				disabled={isPending}
-				aria-haspopup='listbox'
+				aria-haspopup="listbox"
 				aria-expanded={isOpen}
 				aria-label={t('language.label')}
-				className='focus-ring flex min-h-11 w-full cursor-pointer items-center gap-2 rounded-(--radius-button) border border-(--color-app-border) bg-(--color-app-surface) px-3 text-sm font-semibold text-(--color-app-text-secondary)'
+				className="focus-ring flex min-h-11 w-full cursor-pointer items-center gap-2 rounded-(--radius-button) border border-(--color-app-border) bg-(--color-app-surface) px-3 text-sm font-semibold text-(--color-app-text-secondary)"
 			>
 				<Globe2
-					aria-hidden='true'
-					className='h-4 w-4 shrink-0 text-(--color-app-accent)'
+					aria-hidden="true"
+					className="h-4 w-4 shrink-0 text-(--color-app-accent)"
 				/>
-				<span className='text-(--color-app-text)'>{currentLabel}</span>
+				<span className="text-(--color-app-text)">{currentLabel}</span>
 				<ChevronDown
-					aria-hidden='true'
+					aria-hidden="true"
 					className={`h-4 w-4 shrink-0 transition-transform ${
 						isOpen ? 'rotate-180' : 'rotate-0'
 					}`}
@@ -88,35 +88,29 @@ export function LanguageSelect() {
 						<>
 							{/* Backdrop: any outside click closes the menu. */}
 							<button
-								type='button'
-								aria-hidden='true'
+								type="button"
+								aria-hidden="true"
 								tabIndex={-1}
 								onClick={() => setIsOpen(false)}
-								className='fixed inset-0 z-[1000] cursor-default'
+								className="fixed inset-0 z-1000 cursor-default"
 							/>
 							<ul
-								role='listbox'
+								role="listbox"
 								aria-label={t('language.label')}
 								style={{
 									top: menuPosition.top,
 									right: menuPosition.right,
 									minWidth: menuPosition.minWidth,
 								}}
-								className='fixed z-[1001] overflow-hidden rounded-(--radius-button) border border-(--color-app-border) bg-(--color-app-surface) shadow-(--shadow-card)'
+								className="fixed z-1001 overflow-hidden rounded-(--radius-button) border border-(--color-app-border) bg-(--color-app-surface) shadow-(--shadow-card)"
 							>
 								{languages.map(item => {
 									const isActive = item.value === locale
 									return (
-										<li
-											key={item.value}
-											role='option'
-											aria-selected={isActive}
-										>
+										<li key={item.value} role="option" aria-selected={isActive}>
 											<button
-												type='button'
-												onClick={() =>
-													selectLanguage(item.value)
-												}
+												type="button"
+												onClick={() => selectLanguage(item.value)}
 												className={`focus-ring block w-full cursor-pointer px-4 py-2 text-center text-sm font-semibold transition-colors ${
 													isActive
 														? 'bg-(--gradient-app-soft) text-(--color-app-accent)'

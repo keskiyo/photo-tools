@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import {
 	countryToLanguage,
 	detectPreferredLanguage,
+	getLanguageFromRequestHeaders,
 	normalizeLanguage,
 } from '@/lib/language'
 
@@ -38,5 +39,24 @@ describe('language detection', () => {
 		expect(countryToLanguage('ru')).toBe('ru')
 		expect(countryToLanguage('DE')).toBe('en')
 		expect(countryToLanguage(null)).toBeNull()
+	})
+
+	it('reads selected UI language from request cookies first', () => {
+		expect(
+			getLanguageFromRequestHeaders(
+				new Headers({
+					cookie: 'geo-language=en; ui-language=ru',
+					'accept-language': 'en-US,en;q=0.9',
+				}),
+			),
+		).toBe('ru')
+	})
+
+	it('falls back to accept-language when language cookies are absent', () => {
+		expect(
+			getLanguageFromRequestHeaders(
+				new Headers({ 'accept-language': 'ru-RU,ru;q=0.9,en;q=0.8' }),
+			),
+		).toBe('ru')
 	})
 })
